@@ -1,0 +1,237 @@
+extensions:
+    rest:
+       services:
+         - name: transport_service
+           base_url: !ENV ${TRANSPORT_BOT_API}
+           timeout: 10
+channels:
+  telegram:
+    api_token: !ENV ${TELEGRAM_DRIVER_API_KEY}
+intents:
+  - name: start_route
+    examples:
+      - start route
+  - name: change_route
+    examples:
+      - change route
+  - name: stop_route
+    examples:
+      - stop route
+rpc:
+  - method: disconnect
+dialog:
+  - condition: true
+    label: welcome
+    response: |-
+      {% GET "transport_service://driver/{}".format(dialog.user_id) on_error "continue" %}
+      {% if not rest.ok %}
+         Transport Bot Server not available.
+      {% elif rest.json %}
+         Welcome 👋
+         {% set slots.phone = rest.json['phone'] %}
+         {% set slots.name = rest.json['name'] %}
+         <jump_to node="waiting_location" transition="response" />
+      {% else %}
+         Welcome 👋
+         <jump_to node="waiting_contact" transition="response" />
+      {% endif %}
+
+  - condition: false
+    label: waiting_contact
+    response: |-
+      <keyboard_button_contact title="Send your phone" text="Could you please send me your contact." />
+    followup:
+      - condition: message.contact
+        label: contact
+        response: |-
+          {% set slots.phone = message.contact.phone_number %}
+          {% if message.contact.last_name %}
+            {% set slots.name = message.contact.first_name + ' ' + message.contact.last_name %}
+          {% else %}
+            {% set slots.name = message.contact.first_name %}
+          {% endif %}
+          <jump_to node="waiting_location" transition="response" />
+      - condition: true
+        label: contact_error
+        response: |-
+          Unknown contact format
+          <jump_to node="waiting_contact" transition="response" />
+
+  - condition: false
+    label: waiting_location
+    response: |-
+      <keyboard_button_location title="My location" text="Enter your location." />
+    followup:
+      - condition: message.location
+        label: location
+        response: |-
+          {% set slots.location = message.location %}
+          <jump_to node="route_list" transition="response" />
+      - condition: true
+        label: location_error
+        response: |-
+          Unknown location format
+          <jump_to node="waiting_location" transition="response" />
+
+  - condition: false
+    label: route_list
+    response: |-
+      {% POST "transport_service://driver/get_routes" body {
+        'latitude': slots.location.latitude,
+        'longitude': slots.location.longitude
+      } %}
+      {% set index = namespace(value=1) %}
+      <inline_keyboard text="Please choose a route" >
+        <row>
+        {% for route in rest.json %}
+          <button caption="{{ route.name }}" callback_data="{{ route.key }}" />
+          {% if index.value % 2 == 0 %}
+            </row>
+            <row>
+          {% endif %}
+          {% set index.value = index.value + 1 %}
+        {% endfor %}
+        </row>
+      </inline_keyboard>
+      <jump_to node="waiting_route" transition="response" />
+
+  - condition: false
+    label: waiting_route
+    response: ""
+    followup:
+      - condition: message.callback_query
+        label: route
+        response: |-
+          {% set slots.route = message.callback_query.data %}
+          {% POST "transport_service://driver/{}".format(dialog.user_id) body {
+            'phone': slots.phone,
+            'name': slots.name,
+            'latitude': slots.location.latitude,
+            'longitude': slots.location.longitude,
+            'route': message.callback_query.data
+          } %}
+          {% if slots.location.live_period %}
+            <jump_to node="start_button" transition="response" />
+          {% else %}
+            <jump_to node="waiting_live_location" transition="response" />
+          {% endif %}
+      - condition: message.location and message.location.live_period
+        label: live_location_waiting_route
+        response: |-
+          {% set slots.location = message.location %}
+          {% PUT "transport_service://driver/{}/location".format(dialog.user_id) body {
+                 'latitude': slots.location.latitude,
+                 'longitude': slots.location.longitude
+              }
+          %}
+          <jump_to node="waiting_route" transition="response" />
+      - condition: true
+        label: route_error
+        response: |-
+          Unknown route format
+          <jump_to node="waiting_route" transition="response" />
+
+  - condition: false
+    label: waiting_live_location
+    response: |-
+      <keyboard_button_list text="Set live location (or send location for test)" >
+        <buttons>Change route</buttons>
+      </keyboard_button_list>
+    followup:
+      - condition: message.location
+        label: live_location
+        response: |-
+          {% set slots.location = message.location %}
+          {% PUT "transport_service://driver/{}/location".format(dialog.user_id) body {
+                 'latitude': slots.location.latitude,
+                 'longitude': slots.location.longitude
+              }
+          %}
+          {% if message.location.live_period %}
+            Location sharing enabled.
+          {% else %}
+            📍 Got a current location.<br/>
+            To change the location,<br/>
+            send a new point in a few minutes.<br/>
+            You can also enable sharing your location.
+          {% endif %}
+          <jump_to node="start_button" transition="response" />
+      - condition: intents.change_route
+        label: change_route_on_waiting_live_location
+        response: |-
+          <jump_to node="route_list" transition="response" />
+      - condition: true
+        label: live_location_error
+        response: |-
+          Unknown live_location format
+          <jump_to node="waiting_live_location" transition="response" />
+
+  - condition: false
+    label: start_button
+    response: |-
+      <keyboard_button_list text="Click to start or change the route:" >
+        <buttons>Start route</buttons>
+        <buttons>Change route</buttons>
+      </keyboard_button_list>
+      <jump_to node="waiting_start_route" transition="response" />
+
+  - condition: false
+    label: waiting_start_route
+    response: ""
+    followup:
+      - condition: message.location
+        label: live_location_on_waiting_start_route
+        response: |-
+          {% set slots.location = message.location %}
+          {% PUT "transport_service://driver/{}/location".format(dialog.user_id) body {
+                 'latitude': slots.location.latitude,
+                 'longitude': slots.location.longitude
+              }
+          %}
+          <jump_to node="waiting_start_route" transition="response" />
+      - condition: intents.change_route
+        label: change_route_on_waiting_start
+        response: |-
+          <jump_to node="route_list" transition="response" />
+      - condition: intents.start_route
+        label: started_route
+        response: |-
+          {% set slots.state = 'started' %}
+          {% POST "transport_service://driver/{}/start".format(dialog.user_id) body {} %}
+          <keyboard_button_list text="The route started" >
+            <buttons>Stop route</buttons>
+          </keyboard_button_list>
+          <jump_to node="process_route" transition="response" />
+      - condition: true
+        label: start_error
+        response: |-
+          Unknown start format
+          <jump_to node="start_button" transition="response" />
+
+  - condition: false
+    label: process_route
+    response: ""
+    followup:
+      - condition: message.location
+        label: location_on_start_route
+        response: |-
+          {% set slots.location = message.location %}
+          {% PUT "transport_service://driver/{}/location".format(dialog.user_id) body {
+                 'latitude': slots.location.latitude,
+                 'longitude': slots.location.longitude
+              }
+          %}
+          <jump_to node="process_route" transition="response" />
+      - condition: intents.stop_route
+        label: stop_route
+        response: |-
+          {% set slots.state = 'stopped' %}
+          {% POST "transport_service://driver/{}/stop".format(dialog.user_id) body {} %}
+          <keyboard_button_location text="The route is stopped. Switch off live location." title="My location" />
+      - condition: true
+        label: start_route_error
+        response: |-
+          <keyboard_button_list text="The route started" >
+            <buttons>Stop route</buttons>
+          </keyboard_button_list>
+          <jump_to node="process_route" transition="response" />

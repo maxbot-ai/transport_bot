@@ -1,0 +1,214 @@
+{
+    "stops": {
+        "hard_rock_cafe": {
+            "name": "Old Park Lane Hard Rock Cafe",
+            "address": "London W1J 7PX, United Kingdom",
+            "location": {"lat": 51.504251036813, "lon": -0.14841997129390494}
+        },
+        "hyde_park": {
+            "name": "Hyde Park Corner",
+            "address": "London SW1X 7JN, United Kingdom",
+            "location": {"lat": 51.503105673552774, "lon": -0.1533861136515366}
+        },
+        "knightsbridge": {
+            "name": "Knightsbridge Station",
+            "address": "London SW1X 7QL, United Kingdom",
+            "location": {"lat": 51.50171368782373, "lon": -0.16186293357994594}
+        },
+        "rutland_Gardens": {
+            "name": "Rutland Gardens",
+            "address": "London SW7 1AY, United Kingdom",
+            "location": {"lat": 51.50194310400477, "lon": -0.16706937988801115}
+        },
+        "prince_of_wales_gate": {
+            "name": "Prince Of Wales Gate",
+            "address": "London SW7 1NR, United Kingdom",
+            "location": {"lat": 51.50203414185394, "lon": -0.1709332645752508}
+        },
+        "royal_albert_hall": {
+            "name": "Royal Albert Hall",
+            "address": "London SW7 5ET, United Kingdom",
+            "location": {"lat": 51.50173918472009, "lon": -0.1763456818882362}
+        },
+        "queens_gate": {
+            "name": "Queens Gate",
+            "address": "London SW7 5ET, United Kingdom",
+            "location": {"lat": 51.50157342724362, "lon": -0.18122663541752668}
+        },
+        "palace_gate": {
+            "name": "Palace Gate",
+            "address": "London W8 4PU, United Kingdom",
+            "location": {"lat": 51.501979909042134, "lon": -0.18450913000066096}
+        },
+        "kensington_palace": {
+            "name": "Kensington Palace",
+            "address": "London W8 5NP, United Kingdom",
+            "location": {"lat": 51.502488688202796, "lon": -0.18821234484291666}
+        },
+        "high_street_kensington": {
+            "name": "High Street Kensington Station",
+            "address": "London W8 5SF, United Kingdom",
+            "location": {"lat": 51.50138086455813, "lon": -0.19213630659548836}
+        },
+        "george_street": {
+            "name": "George Street",
+            "address": "Tyburnia, London W2 2EA, United Kingdom",
+            "location": {"lat": 51.51636459920561, "lon": -0.1644930320055584}
+        },
+        "marble_arch_station": {
+            "name": "Marble Arch Station",
+            "address": "London W1H 7EJ, United Kingdom",
+            "location": {"lat": 51.51376465707255, "lon": -0.16042268513587987}
+        },
+        "marble_arch_station2": {
+            "name": "Marble Arch Station / Park Lane",
+            "address": "London W1K 7AE, United Kingdom",
+            "location": {"lat": 51.512444035558396, "lon": -0.1576843013165596}
+        },
+        "dorchester_hotel": {
+            "name": "Dorchester Hotel",
+            "address": "London W1K 7TX, United Kingdom",
+            "location": {"lat": 51.50852863497561, "lon": -0.154138312721848}
+        },
+        "london_hilton_hotel": {
+            "name": "London Hilton Hotel",
+            "address": "London W1J 7FW, United Kingdom",
+            "location": {"lat": 51.505854238392494, "lon": -0.15109908144002523}
+        },
+        "green_park": {
+            "name": "Green Park",
+            "address": "London W1J 8HU, United Kingdom",
+            "location": {"lat": 51.507166929818005, "lon": -0.14250592198326614}
+        },
+        "old_bond_street": {
+            "name": "Old Bond Street",
+            "address": "London W1J 0BF, United Kingdom",
+            "location": {"lat": 51.508500556980366, "lon": -0.13914579329290663}
+        },
+        "piccadilly_circus": {
+            "name": "Piccadilly Circus",
+            "address": "London W1J 0AD, United Kingdom",
+            "location": {"lat": 51.509396836434966, "lon": -0.136328293851044}
+        },
+        "haymarket_jermyn": {
+            "name": "Haymarket Jermyn Street",
+            "address": "London SW1Y 4HA, United Kingdom",
+            "location": {"lat": 51.50977059677481, "lon": -0.13266282563169932}
+        },
+        "trafalgar_square": {
+            "name": "Trafalgar Square",
+            "address": "London WC2N 5DS, United Kingdom",
+            "location": {"lat": 51.507650597240506, "lon": -0.12893730249101418}
+        },
+        "sussex_gardens": {
+            "name": "Sussex Gardens",
+            "address": "London W2 1DH, United Kingdom",
+            "location": {"lat": 51.518595219623045, "lon": -0.16781021469312454}
+        },
+        "orchard_street": {
+            "name": "Orchard Street",
+            "address": "London W1H 6HJ, United Kingdom",
+            "location": {"lat": 51.51463217762133, "lon": -0.15420006568102584}
+        },
+        "portman_square": {
+            "name": "Portman Square",
+            "address": "London W1U 3HJ, United Kingdom",
+            "location": {"lat": 51.51677592543605, "lon": -0.15510913068653584}
+        },
+        "york_street": {
+            "name": "York Street",
+            "address": "London W1U 6DF, United Kingdom",
+            "location": {"lat": 51.52067588670414, "lon": -0.15693806744995545}
+        },
+        "baker_street": {
+            "name": "Baker Street Station",
+            "address": "London NW1 5RU, United Kingdom",
+            "location": {"lat": 51.52281935008134, "lon": -0.1579013573382192}
+        },
+        "park_road": {
+            "name": "Park Road",
+            "address": "London NW1 6XT, United Kingdom",
+            "location": {"lat": 51.52516011800028, "lon": -0.1602944814207125}
+        },
+        "alpha_close": {
+            "name": "Alpha Close",
+            "address": "London NW1 4SN, United Kingdom",
+            "location": {"lat": 51.52718837821164, "lon": -0.16411944131489603}
+        },
+        "wilton_street": {
+            "name": "Wilton Street",
+            "address": "London SW1X 7AX, United Kingdom",
+            "location": {"lat": 51.49951166247005, "lon": -0.148227478278852}
+        },
+        "buckingham_palace": {
+            "name": "Buckingham Palace Road Bressenden Place",
+            "address": "London SW1E 5DJ, United Kingdom",
+            "location": {"lat": 51.497283660879745, "lon": -0.14431018057172246}
+        },
+        "grosvenor_gardens": {
+            "name": "Grosvenor Gardens",
+            "address": "London SW1W 0BP, United Kingdom",
+            "location": {"lat": 51.49692285199256, "lon": -0.14564503220905214}
+        }
+    },
+    "routes": {
+        "9": {
+            "name": "Bus №9",
+            "type": "bus",
+            "stops": [
+                "trafalgar_square",
+                "haymarket_jermyn",
+                "piccadilly_circus",
+                "old_bond_street",
+                "green_park",
+                "hard_rock_cafe",
+                "hyde_park",
+                "knightsbridge",
+                "rutland_Gardens",
+                "prince_of_wales_gate",
+                "royal_albert_hall",
+                "queens_gate",
+                "palace_gate",
+                "kensington_palace",
+                "high_street_kensington"
+            ]
+        },
+        "23": {
+            "name": "Bus №23",
+            "type": "bus",
+            "stops": [
+                "sussex_gardens",
+                "george_street",
+                "marble_arch_station",
+                "marble_arch_station2",
+                "dorchester_hotel",
+                "london_hilton_hotel",
+                "hard_rock_cafe",
+                "green_park",
+                "old_bond_street",
+                "piccadilly_circus",
+                "haymarket_jermyn",
+                "trafalgar_square"
+            ]
+        },
+        "13": {
+            "name": "Bus №13",
+            "type": "bus",
+            "stops": [
+                "alpha_close",
+                "park_road",
+                "baker_street",
+                "york_street",
+                "portman_square",
+                "orchard_street",
+                "marble_arch_station2",
+                "dorchester_hotel",
+                "london_hilton_hotel",
+                "hyde_park",
+                "wilton_street",
+                "buckingham_palace",
+                "grosvenor_gardens"
+            ]
+        }
+    }
+}

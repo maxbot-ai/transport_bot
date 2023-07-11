@@ -1,0 +1,9 @@
+### Common settings
+routes_json='tests/routes.json'
+### Server settings
+bind_port=5000
+ors_token='5b3ce3597851110001cf624850560a9757364cc3968422712ace79f9'
+### Virtual drivers settings
+virtual_mode='one'
+virtual_count=10
+virtual_timeout=0

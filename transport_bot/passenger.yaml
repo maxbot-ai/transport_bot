@@ -1,0 +1,83 @@
+extensions:
+    rest:
+       services:
+         - name: transport_service
+           base_url: !ENV ${TRANSPORT_BOT_API}
+           timeout: 10
+channels:
+  telegram:
+    api_token: !ENV ${TELEGRAM_PASSENGER_API_KEY}
+dialog:
+  - condition: message.text and message.text.startswith('/start')
+    label: routes_request
+    response: |-
+      {% POST "transport_service://passenger/get_routes" body {
+        'start_command': message.text
+      } on_error "continue" %}
+      {% if not rest.ok %}
+        Transport Bot Server not available.
+      {% elif rest.json.error %}
+        {{ rest.json.error }}.
+      {% else %}
+        {% set slots.stop = rest.json.stop %}
+        {% set slots.routes = rest.json.routes %}
+        <jump_to node="routes_view" transition="response" />
+      {% endif %}
+
+  - condition: false
+    label: routes_view
+    response: |-
+      ℹ️ Stop information<br/>
+      Name: {{ slots.stop.name }}<br/>
+      Address: {{ slots.stop.address }}
+      {% set index = namespace(value=1) %}
+      <inline_keyboard text="Select a route to view the nearest driver" >
+       <row>
+       {% for route in slots.routes %}
+         <button caption="{{ route.name }}" callback_data="{{ route.key }}" />
+         {% if index.value % 2 == 0 %}
+           </row>
+           <row>
+         {% endif %}
+         {% set index.value = index.value + 1 %}
+       {% endfor %}
+       </row>
+      </inline_keyboard>
+      <jump_to node="nearest_driver_request" transition="response" />
+
+  - condition: false
+    label: nearest_driver_request
+    response: ""
+    followup:
+      - condition: message.callback_query
+        label: choice_route
+        response: |-
+          {% POST "transport_service://passenger/get_nearest_driver" body {
+             'stop': slots.stop.key,
+             'route': message.callback_query.data
+          } %}
+          {% if rest.json %}
+            Nearest driver on route {{message.callback_query.data}}<br/>
+            Name: {{ rest.json['name'] }}<br/>
+            Duration: {{ rest.json['duration'] }} min<br/>
+            Distance: {{ rest.json['distance'] }} km<br/>
+          {% else %}
+            No driver
+          {% endif %}
+          <jump_to node="routes_view" transition="response" />
+
+      - condition: message.text and message.text.startswith('/start')
+        label: other_stop
+        response: |-
+          <jump_to node="routes_request" transition="response" />
+
+      - condition: true
+        label: nearest_driver_request_error
+        response: |-
+          Unknown format
+          <jump_to node="routes_view" transition="response" />
+
+  - condition: true
+    label: error
+    response: |-
+      Please scan the QR code at the stop.
